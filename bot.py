@@ -10,6 +10,7 @@ from bale import (
 
 from news import format_news
 from tools import format_category
+from usecases import format_usecase
 
 
 TOKEN = os.getenv("BALE_TOKEN")
@@ -153,6 +154,98 @@ def tool_back_menu():
         InlineKeyboardButton(
             text="🛠 بازگشت به بانک ابزارها",
             callback_data="tools"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
+# USE CASES MENU
+# ==================================================
+
+def usecases_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="📱 ساخت پست اینستاگرام",
+            callback_data="usecase_instagram"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎬 ساخت ویدئوی تبلیغاتی",
+            callback_data="usecase_video"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="📝 نوشتن متن و مقاله",
+            callback_data="usecase_writing"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🖼 ساخت تصویر تبلیغاتی",
+            callback_data="usecase_image"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔎 تحقیق و جمع‌آوری اطلاعات",
+            callback_data="usecase_research"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="💼 AI در کسب‌وکار",
+            callback_data="usecase_business"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎓 AI برای یادگیری",
+            callback_data="usecase_study"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔙 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
+# USE CASE BACK MENU
+# ==================================================
+
+def usecase_back_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="💡 بازگشت به کاربردها",
+            callback_data="usecases"
         )
     )
 
@@ -670,7 +763,10 @@ async def on_message(message: Message):
 
         await message.reply(
             "💡 کاربردهای واقعی AI\n\n"
-            "این بخش به‌زودی با نمونه‌های واقعی و کاربردی تکمیل می‌شود."
+            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، "
+            "نه فقط اسم ابزارها.\n\n"
+            "👇 یک کاربرد را انتخاب کن:",
+            components=usecases_menu()
         )
 
     elif message.content == "/roadmap":
@@ -793,15 +889,71 @@ async def on_callback(callback: CallbackQuery):
         )
 
     # ----------------------------------------------
-    # OTHER SECTIONS
+    # USE CASES
     # ----------------------------------------------
 
     elif data == "usecases":
 
         await callback.message.reply(
             "💡 کاربردهای واقعی AI\n\n"
-            "نمونه‌های واقعی و کاربردی به‌زودی اضافه می‌شوند."
+            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، "
+            "نه فقط اسم ابزارها.\n\n"
+            "👇 یک کاربرد را انتخاب کن:",
+            components=usecases_menu()
         )
+
+    elif data == "usecase_instagram":
+
+        await callback.message.reply(
+            format_usecase("instagram"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_video":
+
+        await callback.message.reply(
+            format_usecase("video"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_writing":
+
+        await callback.message.reply(
+            format_usecase("writing"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_image":
+
+        await callback.message.reply(
+            format_usecase("image"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_research":
+
+        await callback.message.reply(
+            format_usecase("research"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_business":
+
+        await callback.message.reply(
+            format_usecase("business"),
+            components=usecase_back_menu()
+        )
+
+    elif data == "usecase_study":
+
+        await callback.message.reply(
+            format_usecase("study"),
+            components=usecase_back_menu()
+        )
+
+    # ----------------------------------------------
+    # ROADMAP
+    # ----------------------------------------------
 
     elif data == "roadmap":
 
