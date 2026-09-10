@@ -1,50 +1,9 @@
 import os
-from bale import Bot, Message, InlineKeyboardMarkup, InlineKeyboardButton
+from bale import Bot, Message
 
 TOKEN = os.getenv("BALE_TOKEN")
 
 bot = Bot(token=TOKEN)
-
-
-def main_menu():
-    return InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    text="🧠 AI از صفر تا کاربرد",
-                    callback_data="learn"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="🆕 اخبار AI",
-                    callback_data="news"
-                ),
-                InlineKeyboardButton(
-                    text="🛠 ابزارهای جدید",
-                    callback_data="tools"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="💡 کاربردهای واقعی AI",
-                    callback_data="usecases"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="🎯 از کجا شروع کنم؟",
-                    callback_data="start_ai"
-                )
-            ],
-            [
-                InlineKeyboardButton(
-                    text="ℹ️ درباره AIHOOOSH",
-                    callback_data="about"
-                )
-            ]
-        ]
-    )
 
 
 @bot.event
@@ -59,17 +18,17 @@ async def on_message(message: Message):
         await message.reply(
             "🤖 AIHOOOSH\n\n"
             "دنیای هوش مصنوعی، ساده و کاربردی.\n\n"
-            "اینجا می‌تونی AI رو یاد بگیری، "
-            "ابزارهای جدید رو بشناسی و کاربردهای واقعی "
-            "هوش مصنوعی رو ببینی.\n\n"
-            "از کجا شروع کنیم؟ 👇",
-            components=main_menu()
+            "🧠 AI از صفر تا کاربرد\n"
+            "🆕 اخبار هوش مصنوعی\n"
+            "🛠 ابزارهای جدید AI\n"
+            "💡 کاربردهای واقعی AI\n"
+            "🎯 مسیر شروع یادگیری\n\n"
+            "به‌زودی این بخش‌ها را به منوی تعاملی تبدیل می‌کنیم."
         )
 
     else:
         await message.reply(
-            "برای استفاده از امکانات AIHOOOSH، "
-            "دستور /start را بزن. 🤖"
+            "برای شروع، /start را بزن. 🤖"
         )
 
 
