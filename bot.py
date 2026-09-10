@@ -11,6 +11,7 @@ from bale import (
 from news import format_news
 from tools import format_category
 from usecases import format_usecase
+from prompts import format_prompt_category, format_prompt
 
 
 TOKEN = os.getenv("BALE_TOKEN")
@@ -56,6 +57,13 @@ def main_menu():
 
     keyboard.add(
         InlineKeyboardButton(
+            text="📋 پرامپت‌های آماده",
+            callback_data="prompts"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
             text="🎯 مسیر یادگیری",
             callback_data="roadmap"
         )
@@ -65,8 +73,22 @@ def main_menu():
 
 
 # ==================================================
-# NEWS BACK MENU
+# SIMPLE BACK MENUS
 # ==================================================
+
+def main_back_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
 
 def news_back_menu():
 
@@ -141,10 +163,6 @@ def tools_menu():
 
     return keyboard
 
-
-# ==================================================
-# TOOL BACK MENU
-# ==================================================
 
 def tool_back_menu():
 
@@ -234,10 +252,6 @@ def usecases_menu():
     return keyboard
 
 
-# ==================================================
-# USE CASE BACK MENU
-# ==================================================
-
 def usecase_back_menu():
 
     keyboard = InlineKeyboardMarkup()
@@ -246,6 +260,141 @@ def usecase_back_menu():
         InlineKeyboardButton(
             text="💡 بازگشت به کاربردها",
             callback_data="usecases"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
+# PROMPTS MENU
+# ==================================================
+
+PROMPT_CATEGORIES = {
+    "content": "📝 تولید محتوا",
+    "image": "🎨 ساخت تصویر",
+    "video": "🎬 ویدئو",
+    "business": "💼 کسب‌وکار",
+    "study": "🎓 یادگیری",
+    "research": "🔎 تحقیق",
+    "prompting": "🧠 پرامپت‌نویسی"
+}
+
+
+def prompts_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="📝 تولید محتوا",
+            callback_data="promptcat_content"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎨 ساخت تصویر",
+            callback_data="promptcat_image"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎬 ویدئو",
+            callback_data="promptcat_video"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="💼 کسب‌وکار",
+            callback_data="promptcat_business"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎓 یادگیری",
+            callback_data="promptcat_study"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔎 تحقیق",
+            callback_data="promptcat_research"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🧠 پرامپت‌نویسی",
+            callback_data="promptcat_prompting"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+def prompt_items_menu(category):
+
+    from prompts import get_prompt_category
+
+    data = get_prompt_category(category)
+
+    keyboard = InlineKeyboardMarkup()
+
+    if data:
+
+        for index, item in enumerate(data["items"]):
+
+            keyboard.add(
+                InlineKeyboardButton(
+                    text=f"{index + 1}️⃣ {item['title']}",
+                    callback_data=f"prompt_{category}_{index}"
+                )
+            )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔙 بازگشت به دسته‌ها",
+            callback_data="prompts"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+def prompt_back_menu(category):
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔙 بازگشت به پرامپت‌ها",
+            callback_data=f"promptcat_{category}"
         )
     )
 
@@ -306,47 +455,18 @@ def learning_menu():
 
 
 # ==================================================
-# CHAPTER 1
+# CHAPTER MENUS
 # ==================================================
 
 def chapter1_menu():
 
     keyboard = InlineKeyboardMarkup()
 
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣ هوش مصنوعی چیست؟",
-            callback_data="lesson1"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="2️⃣ AI چگونه کار می‌کند؟",
-            callback_data="lesson2"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="3️⃣ مدل‌های هوش مصنوعی",
-            callback_data="lesson3"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="4️⃣ تفاوت AI و ابزارهای AI",
-            callback_data="lesson4"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="5️⃣ از کجا شروع کنیم؟",
-            callback_data="lesson5"
-        )
-    )
+    keyboard.add(InlineKeyboardButton(text="1️⃣ هوش مصنوعی چیست؟", callback_data="lesson1"))
+    keyboard.add(InlineKeyboardButton(text="2️⃣ AI چگونه کار می‌کند؟", callback_data="lesson2"))
+    keyboard.add(InlineKeyboardButton(text="3️⃣ مدل‌های هوش مصنوعی", callback_data="lesson3"))
+    keyboard.add(InlineKeyboardButton(text="4️⃣ تفاوت AI و ابزارهای AI", callback_data="lesson4"))
+    keyboard.add(InlineKeyboardButton(text="5️⃣ از کجا شروع کنیم؟", callback_data="lesson5"))
 
     keyboard.add(
         InlineKeyboardButton(
@@ -357,49 +477,16 @@ def chapter1_menu():
 
     return keyboard
 
-
-# ==================================================
-# CHAPTER 2
-# ==================================================
 
 def chapter2_menu():
 
     keyboard = InlineKeyboardMarkup()
 
-    keyboard.add(
-        InlineKeyboardButton(
-            text="6️⃣ چگونه با AI صحبت کنیم؟",
-            callback_data="lesson6"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="7️⃣ پرامپت چیست؟",
-            callback_data="lesson7"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="8️⃣ ساخت پرامپت بهتر",
-            callback_data="lesson8"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="9️⃣ خطاهای رایج",
-            callback_data="lesson9"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="🔟 گرفتن نتیجه بهتر",
-            callback_data="lesson10"
-        )
-    )
+    keyboard.add(InlineKeyboardButton(text="6️⃣ چگونه با AI صحبت کنیم؟", callback_data="lesson6"))
+    keyboard.add(InlineKeyboardButton(text="7️⃣ پرامپت چیست؟", callback_data="lesson7"))
+    keyboard.add(InlineKeyboardButton(text="8️⃣ ساخت پرامپت بهتر", callback_data="lesson8"))
+    keyboard.add(InlineKeyboardButton(text="9️⃣ خطاهای رایج", callback_data="lesson9"))
+    keyboard.add(InlineKeyboardButton(text="🔟 گرفتن نتیجه بهتر", callback_data="lesson10"))
 
     keyboard.add(
         InlineKeyboardButton(
@@ -410,49 +497,16 @@ def chapter2_menu():
 
     return keyboard
 
-
-# ==================================================
-# CHAPTER 3
-# ==================================================
 
 def chapter3_menu():
 
     keyboard = InlineKeyboardMarkup()
 
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣1️⃣ AI در تولید محتوا",
-            callback_data="lesson11"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣2️⃣ AI در کسب‌وکار",
-            callback_data="lesson12"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣3️⃣ AI برای تحقیق",
-            callback_data="lesson13"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣4️⃣ AI برای تصویر",
-            callback_data="lesson14"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣5️⃣ AI برای ویدئو و صدا",
-            callback_data="lesson15"
-        )
-    )
+    keyboard.add(InlineKeyboardButton(text="1️⃣1️⃣ AI در تولید محتوا", callback_data="lesson11"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣2️⃣ AI در کسب‌وکار", callback_data="lesson12"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣3️⃣ AI برای تحقیق", callback_data="lesson13"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣4️⃣ AI برای تصویر", callback_data="lesson14"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣5️⃣ AI برای ویدئو و صدا", callback_data="lesson15"))
 
     keyboard.add(
         InlineKeyboardButton(
@@ -464,48 +518,15 @@ def chapter3_menu():
     return keyboard
 
 
-# ==================================================
-# CHAPTER 4
-# ==================================================
-
 def chapter4_menu():
 
     keyboard = InlineKeyboardMarkup()
 
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣6️⃣ ساخت سیستم کاری با AI",
-            callback_data="lesson16"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣7️⃣ ترکیب چند ابزار AI",
-            callback_data="lesson17"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣8️⃣ اتوماسیون با AI",
-            callback_data="lesson18"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="1️⃣9️⃣ ساخت دستیار شخصی",
-            callback_data="lesson19"
-        )
-    )
-
-    keyboard.add(
-        InlineKeyboardButton(
-            text="2️⃣0️⃣ تبدیل AI به مهارت واقعی",
-            callback_data="lesson20"
-        )
-    )
+    keyboard.add(InlineKeyboardButton(text="1️⃣6️⃣ ساخت سیستم کاری با AI", callback_data="lesson16"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣7️⃣ ترکیب چند ابزار AI", callback_data="lesson17"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣8️⃣ اتوماسیون با AI", callback_data="lesson18"))
+    keyboard.add(InlineKeyboardButton(text="1️⃣9️⃣ ساخت دستیار شخصی", callback_data="lesson19"))
+    keyboard.add(InlineKeyboardButton(text="2️⃣0️⃣ تبدیل AI به مهارت واقعی", callback_data="lesson20"))
 
     keyboard.add(
         InlineKeyboardButton(
@@ -525,33 +546,23 @@ lessons = {
 
     "lesson1":
         "1️⃣ هوش مصنوعی چیست؟\n\n"
-        "AI مجموعه‌ای از فناوری‌هاست که به کامپیوتر "
-        "اجازه می‌دهد بعضی کارهایی را انجام دهد که "
-        "معمولاً به توانایی انسانی نیاز دارند.\n\n"
-        "مثلاً فهمیدن متن، تولید تصویر، تحلیل اطلاعات "
-        "و پاسخ دادن به سؤال‌ها.",
+        "AI مجموعه‌ای از فناوری‌هاست که به کامپیوتر اجازه می‌دهد بعضی کارهایی را انجام دهد که معمولاً به توانایی انسانی نیاز دارند.\n\n"
+        "مثلاً فهمیدن متن، تولید تصویر، تحلیل اطلاعات و پاسخ دادن به سؤال‌ها.",
 
     "lesson2":
         "2️⃣ AI چگونه کار می‌کند؟\n\n"
-        "مدل‌های AI با استفاده از داده‌های زیاد، "
-        "الگوها را یاد می‌گیرند و سپس بر اساس "
-        "ورودی ما خروجی تولید می‌کنند.\n\n"
+        "مدل‌های AI با استفاده از داده‌های زیاد، الگوها را یاد می‌گیرند و سپس بر اساس ورودی ما خروجی تولید می‌کنند.\n\n"
         "داده → یادگیری → درخواست → پاسخ",
 
     "lesson3":
         "3️⃣ مدل‌های هوش مصنوعی\n\n"
         "مدل‌های مختلف برای کارهای مختلف ساخته شده‌اند.\n\n"
-        "📝 متن\n"
-        "🖼 تصویر\n"
-        "🎬 ویدئو\n"
-        "🎙 صدا\n"
-        "📊 تحلیل داده",
+        "📝 متن\n🖼 تصویر\n🎬 ویدئو\n🎙 صدا\n📊 تحلیل داده",
 
     "lesson4":
         "4️⃣ تفاوت AI و ابزارهای AI\n\n"
         "AI فناوری است.\n"
-        "ابزار AI محصولی است که این فناوری را "
-        "برای انجام یک کار در اختیار ما قرار می‌دهد.",
+        "ابزار AI محصولی است که این فناوری را برای انجام یک کار در اختیار ما قرار می‌دهد.",
 
     "lesson5":
         "5️⃣ از کجا شروع کنیم؟\n\n"
@@ -564,8 +575,7 @@ lessons = {
     "lesson6":
         "6️⃣ چگونه با AI صحبت کنیم؟\n\n"
         "AI ذهن‌خوان نیست.\n"
-        "هرچه درخواست ما واضح‌تر باشد، احتمال "
-        "گرفتن نتیجه بهتر بیشتر می‌شود.",
+        "هرچه درخواست ما واضح‌تر باشد، احتمال گرفتن نتیجه بهتر بیشتر می‌شود.",
 
     "lesson7":
         "7️⃣ پرامپت چیست؟\n\n"
@@ -592,32 +602,25 @@ lessons = {
 
     "lesson11":
         "1️⃣1️⃣ AI در تولید محتوا\n\n"
-        "ایده‌پردازی، تحقیق، نوشتن، تصویر، ویدئو "
-        "و بسیاری از مراحل تولید محتوا را می‌توان "
-        "با AI سریع‌تر کرد.",
+        "ایده‌پردازی، تحقیق، نوشتن، تصویر، ویدئو و بسیاری از مراحل تولید محتوا را می‌توان با AI سریع‌تر کرد.",
 
     "lesson12":
         "1️⃣2️⃣ AI در کسب‌وکار\n\n"
-        "تحقیق بازار، تولید محتوا، تحلیل اطلاعات، "
-        "ارتباط با مشتری و بهینه‌سازی فرآیندها "
-        "از کاربردهای مهم AI هستند.",
+        "تحقیق بازار، تولید محتوا، تحلیل اطلاعات، ارتباط با مشتری و بهینه‌سازی فرآیندها از کاربردهای مهم AI هستند.",
 
     "lesson13":
         "1️⃣3️⃣ AI برای تحقیق\n\n"
-        "AI می‌تواند در جمع‌آوری، دسته‌بندی، "
-        "مقایسه و خلاصه‌سازی اطلاعات کمک کند.\n\n"
+        "AI می‌تواند در جمع‌آوری، دسته‌بندی، مقایسه و خلاصه‌سازی اطلاعات کمک کند.\n\n"
         "اطلاعات مهم را همیشه با منابع معتبر بررسی کن.",
 
     "lesson14":
         "1️⃣4️⃣ AI برای تصویر\n\n"
         "با AI می‌توان ایده‌های تصویری را به تصویر تبدیل کرد.\n\n"
-        "توصیف موضوع، سبک، نور، محیط و ترکیب‌بندی "
-        "به نتیجه بهتر کمک می‌کند.",
+        "توصیف موضوع، سبک، نور، محیط و ترکیب‌بندی به نتیجه بهتر کمک می‌کند.",
 
     "lesson15":
         "1️⃣5️⃣ AI برای ویدئو و صدا\n\n"
-        "AI می‌تواند در سناریو، تصویر، صداگذاری، "
-        "تدوین و تولید ویدئو کمک کند.",
+        "AI می‌تواند در سناریو، تصویر، صداگذاری، تدوین و تولید ویدئو کمک کند.",
 
     "lesson16":
         "1️⃣6️⃣ ساخت سیستم کاری با AI\n\n"
@@ -631,56 +634,35 @@ lessons = {
 
     "lesson18":
         "1️⃣8️⃣ اتوماسیون با AI\n\n"
-        "اتوماسیون یعنی بعضی کارهای تکراری را "
-        "با دخالت کمتر انسان انجام دهیم.",
+        "اتوماسیون یعنی بعضی کارهای تکراری را با دخالت کمتر انسان انجام دهیم.",
 
     "lesson19":
         "1️⃣9️⃣ ساخت دستیار شخصی\n\n"
-        "می‌توان AI را برای یک حوزه مشخص تنظیم کرد "
-        "تا در تحلیل، برنامه‌ریزی و کارهای تکراری کمک کند.",
+        "می‌توان AI را برای یک حوزه مشخص تنظیم کرد تا در تحلیل، برنامه‌ریزی و کارهای تکراری کمک کند.",
 
     "lesson20":
         "2️⃣0️⃣ تبدیل AI به مهارت واقعی\n\n"
         "هدف، حفظ کردن اسم ابزارها نیست.\n\n"
-        "مهارت واقعی یعنی بتوانی یک مسئله را ببینی، "
-        "راه‌حل مناسب پیدا کنی و از AI برای حل آن استفاده کنی.\n\n"
+        "مهارت واقعی یعنی بتوانی یک مسئله را ببینی، راه‌حل مناسب پیدا کنی و از AI برای حل آن استفاده کنی.\n\n"
         "🚀 اینجا پایان مسیر نیست؛ شروع استفاده واقعی از AI است."
 }
 
 
 # ==================================================
-# LESSON BACK MENU
+# LESSON BACK
 # ==================================================
 
 def lesson_back_menu(lesson_id):
 
     keyboard = InlineKeyboardMarkup()
 
-    if lesson_id in [
-        "lesson1",
-        "lesson2",
-        "lesson3",
-        "lesson4",
-        "lesson5"
-    ]:
+    if lesson_id in ["lesson1", "lesson2", "lesson3", "lesson4", "lesson5"]:
         back = "chapter1"
 
-    elif lesson_id in [
-        "lesson6",
-        "lesson7",
-        "lesson8",
-        "lesson9",
-        "lesson10"
-    ]:
+    elif lesson_id in ["lesson6", "lesson7", "lesson8", "lesson9", "lesson10"]:
         back = "chapter2"
 
-    elif lesson_id in [
-        "lesson11",
-        "lesson12",
-        "lesson13",
-        "lesson14",
-        "lesson15"
-    ]:
+    elif lesson_id in ["lesson11", "lesson12", "lesson13", "lesson14", "lesson15"]:
         back = "chapter3"
 
     else:
@@ -725,7 +707,7 @@ async def on_message(message: Message):
         await message.reply(
             "🤖 AIHOOOSH\n\n"
             "دنیای هوش مصنوعی، ساده و کاربردی.\n\n"
-            "از آموزش تا اخبار، ابزارها و کاربردهای واقعی.\n\n"
+            "از آموزش تا اخبار، ابزارها، کاربردهای واقعی و پرامپت‌های آماده.\n\n"
             "👇 یک بخش را انتخاب کن:",
             components=main_menu()
         )
@@ -741,9 +723,7 @@ async def on_message(message: Message):
 
     elif message.content == "/news":
 
-        await message.reply(
-            "⏳ در حال دریافت اخبار جدید..."
-        )
+        await message.reply("⏳ در حال دریافت اخبار جدید...")
 
         await message.reply(
             format_news(),
@@ -763,10 +743,18 @@ async def on_message(message: Message):
 
         await message.reply(
             "💡 کاربردهای واقعی AI\n\n"
-            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، "
-            "نه فقط اسم ابزارها.\n\n"
+            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، نه فقط اسم ابزارها.\n\n"
             "👇 یک کاربرد را انتخاب کن:",
             components=usecases_menu()
+        )
+
+    elif message.content == "/prompts":
+
+        await message.reply(
+            "📋 پرامپت‌های آماده AIHOOOSH\n\n"
+            "پرامپت‌های کاربردی و آماده کپی برای استفاده واقعی از AI.\n\n"
+            "👇 یک دسته را انتخاب کن:",
+            components=prompts_menu()
         )
 
     elif message.content == "/roadmap":
@@ -793,10 +781,7 @@ async def on_callback(callback: CallbackQuery):
 
     data = callback.data
 
-    # ----------------------------------------------
     # MAIN
-    # ----------------------------------------------
-
     if data == "main":
 
         await callback.message.reply(
@@ -805,10 +790,7 @@ async def on_callback(callback: CallbackQuery):
             components=main_menu()
         )
 
-    # ----------------------------------------------
     # LEARNING
-    # ----------------------------------------------
-
     elif data == "learn":
 
         await callback.message.reply(
@@ -818,25 +800,17 @@ async def on_callback(callback: CallbackQuery):
             components=learning_menu()
         )
 
-    # ----------------------------------------------
     # NEWS
-    # ----------------------------------------------
-
     elif data == "news":
 
-        await callback.message.reply(
-            "⏳ در حال دریافت جدیدترین اخبار AI..."
-        )
+        await callback.message.reply("⏳ در حال دریافت جدیدترین اخبار AI...")
 
         await callback.message.reply(
             format_news(),
             components=news_back_menu()
         )
 
-    # ----------------------------------------------
     # TOOLS
-    # ----------------------------------------------
-
     elif data == "tools":
 
         await callback.message.reply(
@@ -847,114 +821,88 @@ async def on_callback(callback: CallbackQuery):
         )
 
     elif data == "tool_text":
-
-        await callback.message.reply(
-            format_category("text"),
-            components=tool_back_menu()
-        )
+        await callback.message.reply(format_category("text"), components=tool_back_menu())
 
     elif data == "tool_image":
-
-        await callback.message.reply(
-            format_category("image"),
-            components=tool_back_menu()
-        )
+        await callback.message.reply(format_category("image"), components=tool_back_menu())
 
     elif data == "tool_video":
-
-        await callback.message.reply(
-            format_category("video"),
-            components=tool_back_menu()
-        )
+        await callback.message.reply(format_category("video"), components=tool_back_menu())
 
     elif data == "tool_voice":
-
-        await callback.message.reply(
-            format_category("voice"),
-            components=tool_back_menu()
-        )
+        await callback.message.reply(format_category("voice"), components=tool_back_menu())
 
     elif data == "tool_research":
-
-        await callback.message.reply(
-            format_category("research"),
-            components=tool_back_menu()
-        )
+        await callback.message.reply(format_category("research"), components=tool_back_menu())
 
     elif data == "tool_productivity":
+        await callback.message.reply(format_category("productivity"), components=tool_back_menu())
 
-        await callback.message.reply(
-            format_category("productivity"),
-            components=tool_back_menu()
-        )
-
-    # ----------------------------------------------
     # USE CASES
-    # ----------------------------------------------
-
     elif data == "usecases":
 
         await callback.message.reply(
             "💡 کاربردهای واقعی AI\n\n"
-            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، "
-            "نه فقط اسم ابزارها.\n\n"
+            "اینجا AI را بر اساس مسئله واقعی یاد می‌گیریم، نه فقط اسم ابزارها.\n\n"
             "👇 یک کاربرد را انتخاب کن:",
             components=usecases_menu()
         )
 
     elif data == "usecase_instagram":
-
-        await callback.message.reply(
-            format_usecase("instagram"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("instagram"), components=usecase_back_menu())
 
     elif data == "usecase_video":
-
-        await callback.message.reply(
-            format_usecase("video"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("video"), components=usecase_back_menu())
 
     elif data == "usecase_writing":
-
-        await callback.message.reply(
-            format_usecase("writing"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("writing"), components=usecase_back_menu())
 
     elif data == "usecase_image":
-
-        await callback.message.reply(
-            format_usecase("image"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("image"), components=usecase_back_menu())
 
     elif data == "usecase_research":
-
-        await callback.message.reply(
-            format_usecase("research"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("research"), components=usecase_back_menu())
 
     elif data == "usecase_business":
-
-        await callback.message.reply(
-            format_usecase("business"),
-            components=usecase_back_menu()
-        )
+        await callback.message.reply(format_usecase("business"), components=usecase_back_menu())
 
     elif data == "usecase_study":
+        await callback.message.reply(format_usecase("study"), components=usecase_back_menu())
+
+    # PROMPTS
+    elif data == "prompts":
 
         await callback.message.reply(
-            format_usecase("study"),
-            components=usecase_back_menu()
+            "📋 پرامپت‌های آماده AIHOOOSH\n\n"
+            "پرامپت‌های کاربردی و آماده کپی برای استفاده واقعی از AI.\n\n"
+            "👇 یک دسته را انتخاب کن:",
+            components=prompts_menu()
         )
 
-    # ----------------------------------------------
-    # ROADMAP
-    # ----------------------------------------------
+    elif data.startswith("promptcat_"):
 
+        category = data.replace("promptcat_", "")
+
+        await callback.message.reply(
+            format_prompt_category(category),
+            components=prompt_items_menu(category)
+        )
+
+    elif data.startswith("prompt_"):
+
+        parts = data.split("_")
+
+        if len(parts) == 3:
+
+            category = parts[1]
+            index = int(parts[2])
+
+            await callback.message.reply(
+                format_prompt(category, index),
+                components=prompt_back_menu(category)
+            )
+
+    # ROADMAP
     elif data == "roadmap":
 
         await callback.message.reply(
@@ -963,10 +911,7 @@ async def on_callback(callback: CallbackQuery):
             components=learning_menu()
         )
 
-    # ----------------------------------------------
     # CHAPTERS
-    # ----------------------------------------------
-
     elif data == "chapter1":
 
         await callback.message.reply(
@@ -999,10 +944,7 @@ async def on_callback(callback: CallbackQuery):
             components=chapter4_menu()
         )
 
-    # ----------------------------------------------
     # LESSONS
-    # ----------------------------------------------
-
     elif data in lessons:
 
         await callback.message.reply(
