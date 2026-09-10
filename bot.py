@@ -9,6 +9,7 @@ from bale import (
 )
 
 from news import format_news
+from tools import format_category
 
 
 TOKEN = os.getenv("BALE_TOKEN")
@@ -56,6 +57,91 @@ def main_menu():
         InlineKeyboardButton(
             text="🎯 مسیر یادگیری",
             callback_data="roadmap"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
+# TOOLS MENU
+# ==================================================
+
+def tools_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="✍️ متن و تولید محتوا",
+            callback_data="tool_text"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎨 تصویر و طراحی",
+            callback_data="tool_image"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎬 ویدئو",
+            callback_data="tool_video"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🎙 صدا",
+            callback_data="tool_voice"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔎 تحقیق و جستجو",
+            callback_data="tool_research"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="⚡ بهره‌وری و کار",
+            callback_data="tool_productivity"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔙 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
+# TOOL BACK MENU
+# ==================================================
+
+def tool_back_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🛠 بازگشت به بانک ابزارها",
+            callback_data="tools"
+        )
+    )
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🏠 منوی اصلی",
+            callback_data="main"
         )
     )
 
@@ -452,7 +538,7 @@ lessons = {
 
 
 # ==================================================
-# LESSON BACK BUTTON
+# LESSON BACK MENU
 # ==================================================
 
 def lesson_back_menu(lesson_id):
@@ -553,8 +639,10 @@ async def on_message(message: Message):
     elif message.content == "/tools":
 
         await message.reply(
-            "🛠 ابزارهای جدید AI\n\n"
-            "این بخش به‌زودی به بانک ابزارهای AIHOOOSH متصل می‌شود."
+            "🛠 بانک ابزارهای AIHOOOSH\n\n"
+            "ابزارها را بر اساس کاربرد دسته‌بندی کرده‌ایم.\n\n"
+            "👇 یک دسته را انتخاب کن:",
+            components=tools_menu()
         )
 
     elif message.content == "/usecases":
@@ -588,6 +676,10 @@ async def on_callback(callback: CallbackQuery):
 
     data = callback.data
 
+    # ----------------------------------------------
+    # MAIN
+    # ----------------------------------------------
+
     if data == "main":
 
         await callback.message.reply(
@@ -595,6 +687,10 @@ async def on_callback(callback: CallbackQuery):
             "👇 یک بخش را انتخاب کن:",
             components=main_menu()
         )
+
+    # ----------------------------------------------
+    # LEARNING
+    # ----------------------------------------------
 
     elif data == "learn":
 
@@ -604,6 +700,10 @@ async def on_callback(callback: CallbackQuery):
             "👇 فصل موردنظر را انتخاب کن:",
             components=learning_menu()
         )
+
+    # ----------------------------------------------
+    # NEWS
+    # ----------------------------------------------
 
     elif data == "news":
 
@@ -615,12 +715,64 @@ async def on_callback(callback: CallbackQuery):
             format_news()
         )
 
+    # ----------------------------------------------
+    # TOOLS
+    # ----------------------------------------------
+
     elif data == "tools":
 
         await callback.message.reply(
-            "🛠 ابزارهای جدید AI\n\n"
-            "بانک ابزارهای AIHOOOSH به‌زودی فعال می‌شود."
+            "🛠 بانک ابزارهای AIHOOOSH\n\n"
+            "ابزارها را بر اساس کاربرد دسته‌بندی کرده‌ایم.\n\n"
+            "👇 یک دسته را انتخاب کن:",
+            components=tools_menu()
         )
+
+    elif data == "tool_text":
+
+        await callback.message.reply(
+            format_category("text"),
+            components=tool_back_menu()
+        )
+
+    elif data == "tool_image":
+
+        await callback.message.reply(
+            format_category("image"),
+            components=tool_back_menu()
+        )
+
+    elif data == "tool_video":
+
+        await callback.message.reply(
+            format_category("video"),
+            components=tool_back_menu()
+        )
+
+    elif data == "tool_voice":
+
+        await callback.message.reply(
+            format_category("voice"),
+            components=tool_back_menu()
+        )
+
+    elif data == "tool_research":
+
+        await callback.message.reply(
+            format_category("research"),
+            components=tool_back_menu()
+        )
+
+    elif data == "tool_productivity":
+
+        await callback.message.reply(
+            format_category("productivity"),
+            components=tool_back_menu()
+        )
+
+    # ----------------------------------------------
+    # OTHER SECTIONS
+    # ----------------------------------------------
 
     elif data == "usecases":
 
@@ -636,6 +788,10 @@ async def on_callback(callback: CallbackQuery):
             "از شناخت AI تا استفاده حرفه‌ای.",
             components=learning_menu()
         )
+
+    # ----------------------------------------------
+    # CHAPTERS
+    # ----------------------------------------------
 
     elif data == "chapter1":
 
@@ -668,6 +824,10 @@ async def on_callback(callback: CallbackQuery):
             "👇 درس موردنظر را انتخاب کن:",
             components=chapter4_menu()
         )
+
+    # ----------------------------------------------
+    # LESSONS
+    # ----------------------------------------------
 
     elif data in lessons:
 
