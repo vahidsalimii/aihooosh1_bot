@@ -64,6 +64,24 @@ def main_menu():
 
 
 # ==================================================
+# NEWS BACK MENU
+# ==================================================
+
+def news_back_menu():
+
+    keyboard = InlineKeyboardMarkup()
+
+    keyboard.add(
+        InlineKeyboardButton(
+            text="🔙 منوی اصلی",
+            callback_data="main"
+        )
+    )
+
+    return keyboard
+
+
+# ==================================================
 # TOOLS MENU
 # ==================================================
 
@@ -634,7 +652,10 @@ async def on_message(message: Message):
             "⏳ در حال دریافت اخبار جدید..."
         )
 
-        await message.reply(format_news())
+        await message.reply(
+            format_news(),
+            components=news_back_menu()
+        )
 
     elif message.content == "/tools":
 
@@ -712,7 +733,8 @@ async def on_callback(callback: CallbackQuery):
         )
 
         await callback.message.reply(
-            format_news()
+            format_news(),
+            components=news_back_menu()
         )
 
     # ----------------------------------------------
