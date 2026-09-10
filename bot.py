@@ -1,5 +1,11 @@
 import os
-from bale import Bot, Message
+from bale import (
+    Bot,
+    Message,
+    CallbackQuery,
+    InlineKeyboardMarkup,
+    InlineKeyboardButton
+)
 
 TOKEN = os.getenv("BALE_TOKEN")
 
@@ -16,64 +22,87 @@ async def on_message(message: Message):
 
     if message.content == "/start":
 
+        keyboard = InlineKeyboardMarkup()
+
+        keyboard.add(
+            InlineKeyboardButton(
+                text="🧠 AI از صفر تا کاربرد",
+                callback_data="learn"
+            )
+        )
+
+        keyboard.add(
+            InlineKeyboardButton(
+                text="🆕 اخبار هوش مصنوعی",
+                callback_data="news"
+            )
+        )
+
+        keyboard.add(
+            InlineKeyboardButton(
+                text="🛠 ابزارهای جدید AI",
+                callback_data="tools"
+            )
+        )
+
+        keyboard.add(
+            InlineKeyboardButton(
+                text="💡 کاربردهای واقعی AI",
+                callback_data="usecases"
+            )
+        )
+
+        keyboard.add(
+            InlineKeyboardButton(
+                text="🎯 مسیر یادگیری",
+                callback_data="roadmap"
+            )
+        )
+
         await message.reply(
             "🤖 AIHOOOSH\n\n"
             "دنیای هوش مصنوعی، ساده و کاربردی.\n\n"
-            "━━━━━━━━━━━━━━\n"
-            "🧠 AI از صفر تا کاربرد\n"
-            "🆕 اخبار هوش مصنوعی\n"
-            "🛠 ابزارهای جدید AI\n"
-            "💡 کاربردهای واقعی AI\n"
-            "🎯 مسیر شروع یادگیری\n"
-            "━━━━━━━━━━━━━━\n\n"
-            "برای ورود به هر بخش، فعلاً دستور مربوط به آن را ارسال کنید.\n\n"
-            "مثلاً:\n"
-            "🧠 /learn\n"
-            "🆕 /news\n"
-            "🛠 /tools\n"
-            "💡 /usecases\n"
-            "🎯 /roadmap"
+            "یک بخش را انتخاب کن:",
+            components=keyboard
         )
 
-    elif message.content == "/learn":
-        await message.reply(
+
+@bot.event
+async def on_callback(callback: CallbackQuery):
+
+    if callback.data == "learn":
+        await callback.message.reply(
             "🧠 AI از صفر تا کاربرد\n\n"
-            "یک مسیر آموزشی مرحله‌به‌مرحله برای آشنایی "
-            "با هوش مصنوعی و استفاده واقعی از آن.\n\n"
-            "به‌زودی فصل اول را شروع می‌کنیم."
+            "مسیر آموزشی مرحله‌به‌مرحله AIHOOOSH\n"
+            "از آشنایی با هوش مصنوعی تا استفاده حرفه‌ای."
         )
 
-    elif message.content == "/news":
-        await message.reply(
+    elif callback.data == "news":
+        await callback.message.reply(
             "🆕 اخبار هوش مصنوعی\n\n"
             "به‌زودی جدیدترین اخبار مهم AI "
             "به زبان ساده در این بخش قرار می‌گیرد."
         )
 
-    elif message.content == "/tools":
-        await message.reply(
+    elif callback.data == "tools":
+        await callback.message.reply(
             "🛠 ابزارهای جدید AI\n\n"
             "ابزارهای جدید و کاربردی هوش مصنوعی "
             "را اینجا معرفی می‌کنیم."
         )
 
-    elif message.content == "/usecases":
-        await message.reply(
+    elif callback.data == "usecases":
+        await callback.message.reply(
             "💡 کاربردهای واقعی AI\n\n"
-            "اینجا به‌جای معرفی تئوری، "
-            "کاربردهای واقعی و قابل اجرا را می‌بینید."
+            "اینجا کاربردهای واقعی و قابل اجرا "
+            "هوش مصنوعی را می‌بینید."
         )
 
-    elif message.content == "/roadmap":
-        await message.reply(
-            "🎯 مسیر شروع یادگیری AI\n\n"
+    elif callback.data == "roadmap":
+        await callback.message.reply(
+            "🎯 مسیر یادگیری AI\n\n"
             "از صفر شروع می‌کنیم و قدم‌به‌قدم "
             "به استفاده حرفه‌ای‌تر از AI می‌رسیم."
-        )
-
-    else:
-        await message.reply(
-            "برای شروع، /start را بزن. 🤖"
         )
 
 
